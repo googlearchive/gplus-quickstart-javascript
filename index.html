@@ -61,6 +61,13 @@
     <h2>Authentication Logs</h2>
     <pre id="authResult"></pre>
   </div>
+  <div id="loaderror">
+    This section will be hidden by JQuery. If you can see this message, you
+    may be viewing the file rather than running a web server.<br />
+    The sample must be run from http or https. See instructions at
+    <a href="https://developers.google.com/+/quickstart/javascript">
+    https://developers.google.com/+/quickstart/javascript</a>.
+  </div>
 </body>
 <script type="text/javascript">
 var helper = (function() {
@@ -172,6 +179,7 @@ var helper = (function() {
  */
 $(document).ready(function() {
   $('#disconnect').click(helper.disconnect);
+  $('#loaderror').hide();
   if ($('[data-clientid="YOUR_CLIENT_ID"]').length > 0) {
     alert('This sample requires your OAuth credentials (client ID) ' +
         'from the Google APIs console:\n' +
