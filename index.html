@@ -22,15 +22,7 @@
 <html>
 <head>
   <title>Google+ JavaScript Quickstart</title>
-  <script type="text/javascript">
-  (function() {
-    var po = document.createElement('script');
-    po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://plus.google.com/js/client:plusone.js';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(po, s);
-  })();
-  </script>
+  <script src="https://apis.google.com/js/client:platform.js" async defer></script>
   <!-- JavaScript specific to this application that is not related to API
      calls -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" ></script>
@@ -81,7 +73,7 @@ var helper = (function() {
      *   other authentication information.
      */
     onSignInCallback: function(authResult) {
-      gapi.client.load('plus','v1', function(){
+      gapi.client.load('plus','v1').then(function() {
         $('#authResult').html('Auth Result:<br/>');
         for (var field in authResult) {
           $('#authResult').append(' ' + field + ': ' +
@@ -134,11 +126,11 @@ var helper = (function() {
      * Gets and renders the list of people visible to this app.
      */
     people: function() {
-      var request = gapi.client.plus.people.list({
+      gapi.client.plus.people.list({
         'userId': 'me',
         'collection': 'visible'
-      });
-      request.execute(function(people) {
+      }).then(function(res) {
+        var people = res.result;
         $('#visiblePeople').empty();
         $('#visiblePeople').append('Number of people visible to this app: ' +
             people.totalItems + '<br/>');
@@ -153,13 +145,11 @@ var helper = (function() {
      * Gets and renders the currently signed in user's profile data.
      */
     profile: function(){
-      var request = gapi.client.plus.people.get( {'userId' : 'me'} );
-      request.execute( function(profile) {
+      gapi.client.plus.people.get({
+        'userId': 'me'
+      }).then(function(res) {
+        var profile = res.result;
         $('#profile').empty();
-        if (profile.error) {
-          $('#profile').append(profile.error);
-          return;
-        }
         $('#profile').append(
             $('<p><img src=\"' + profile.image.url + '\"></p>'));
         $('#profile').append(
@@ -169,6 +159,10 @@ var helper = (function() {
           $('#profile').append(
               $('<p><img src=\"' + profile.cover.coverPhoto.url + '\"></p>'));
         }
+      }, function(err) {
+        var error = err.result;
+        $('#profile').empty();
+        $('#profile').append(error.message);
       });
     }
   };
