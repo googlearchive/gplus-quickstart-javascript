@@ -67,8 +67,6 @@ var helper = (function() {
      *   other authentication information.
      */
     onSignInCallback: function(authResult) {
-      console.log(authResult);
-
       $('#authResult').html('Auth Result:<br/>');
       for (var field in authResult) {
         $('#authResult').append(' ' + field + ': ' +
