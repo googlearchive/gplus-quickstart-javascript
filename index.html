@@ -23,7 +23,6 @@
 <html>
 <head>
   <title>Google+ JavaScript Quickstart</title>
-  <script src="https://apis.google.com/js/client:platform.js?onload=startApp" async defer></script>
   <!-- JavaScript specific to this application that is not related to API
      calls -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js" ></script>
@@ -77,14 +76,15 @@ var helper = (function() {
         $('#gConnect').hide();
         helper.profile();
         helper.people();
-      } else if (authResult['error'] ||
-          authResult.currentUser.get().getAuthResponse() == null) {
-        // There was an error, which means the user is not signed in.
-        // As an example, you can handle by writing to the console:
-        console.log('There was an error: ' + authResult['error']);
-        $('#authResult').append('Logged out');
-        $('#authOps').hide('slow');
-        $('#gConnect').show();
+      } else {
+          if (authResult['error'] || authResult.currentUser.get().getAuthResponse() == null) {
+            // There was an error, which means the user is not signed in.
+            // As an example, you can handle by writing to the console:
+            console.log('There was an error: ' + authResult['error']);
+          }
+          $('#authResult').append('Logged out');
+          $('#authOps').hide('slow');
+          $('#gConnect').show();
       }
 
       console.log('authResult', authResult);
@@ -198,11 +198,12 @@ function startApp() {
               console.log('init');
               auth2 = gapi.auth2.getAuthInstance();
               auth2.isSignedIn.listen(updateSignIn);
-              auth2.then(updateSignIn());
+              auth2.then(updateSignIn);
             });
     });
   });
 }
 </script>
+<script src="https://apis.google.com/js/client:platform.js?onload=startApp"></script>
 </body>
 </html>
